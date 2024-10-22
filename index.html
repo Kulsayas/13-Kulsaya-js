@@ -62,36 +62,36 @@
       <h1>Shopping Cart</h1>
       <h3>Add Item for selection</h3>
       <div class="container-input">
-        <div>
-          <label>Product Name:</label>
-          <input type="text" id="input-txt" />
-        </div>
-        <div>
-          <label>Price:</label>
-          <input type="number" id="input-price" />
-        </div>
-        <div>
-          <label>Image URL:</label>
-          <input type="url" id="input-txt-url" />
-        </div>
-        <button onclick="addItem()">Create Product</button>
+            <div>
+                <label>Product Name:</label>
+                <input type="text" id="input-txt" />
+            </div>
+            <div>
+                <label>Price:</label>
+                <input type="number" id="input-price" />
+            </div>
+            <div>
+                <label>Image URL:</label>
+                <input type="url" id="input-txt-url" />
+            </div>
+            <button onclick="addItem()">Create Product</button>
       </div>
       <div class="container-dashboard">
-        <h3>Product Dashboard
-        <div id="product-dashboard"> 
-            <!-- PRODUCT LIST HERE -->
-        </div>
-        <button onclick="addToCard()">Add to Cart</button>
+            <h3>Product Dashboard
+            <div id="product-dashboard"> 
+                <!-- PRODUCT LIST HERE -->
+            </div>
+            <button onclick="addToCard()">Add to Cart</button>
       </div>
       <div class="container-checkout">
-        <h3>Checkout
-        <div id="product-checkout">
-            <!-- PRODUCT CHECKOUT HERE -->
-        </div>
-        <button onclick="total()">Calculate Final Price</button>
-        <div id="totalPrice" class="totalPrice">
-            
-        </div>
+            <h3>Checkout
+            <div id="product-checkout">
+                <!-- PRODUCT CHECKOUT HERE -->
+            </div>
+            <button onclick="total()">Calculate Final Price</button>
+            <div id="totalPrice" class="totalPrice">
+                <!-- Total Price HERE -->
+            </div>
       </div>
       
     </div>
@@ -138,7 +138,7 @@
         document.getElementById("product-dashboard").innerHTML = productListHtml
     }
 
-    //Select a product and get the value of the product we selected.
+    //SELECT A PRODUCT AND GET THE VALUE OF THE PRODUCT WE SELECTED.
     function selectProduct(event) {
         const productList = document.getElementById('product-list').value
         // console.log(productList);
@@ -163,7 +163,7 @@
         console.log(selectItem);
     }
 
-    // Select the desired product and display it in the Check out section.
+    //SELECT THE DESIRED PRODUCT AND DISPLAY IT IN THE CHECK OUT SECTION.
     function addToCard() {
         let productCheckoutHtml = ""
         for (let item of selectItem) {
@@ -182,7 +182,7 @@
 
     }
 
-    //remove item
+    //REMOVE ITEMS
     function removeItem(id) {
         const idNumber = Number(id)
         selectItem = selectItem.filter(item => item.id.toString() !== idNumber.toString())
@@ -192,7 +192,7 @@
          
     }
 
-    //Calculate Total Price
+    //CALCULATED TOTAL PRICE
     function total() {
         let total = 0
         selectItem.forEach(item => { 
