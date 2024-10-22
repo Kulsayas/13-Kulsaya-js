@@ -5,7 +5,202 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
+  <style>
+     body {
+        display: block;
+        box-sizing: none;
+        height: 100vh;
+        width: 100vw;
+        background-color: #f4f4f4;
+        font-family: Arial, Helvetica, sans-serif;
+     }
+     .container {
+      display: flex;
+      flex-direction: column;
+      margin-left: auto;
+      margin-right: auto;
+      width: 60%;
+
+    }
+    .container-input {
+      display: flex;
+      
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+   
+    .container-dashboard {
+      display: flex;
+     align-items: center;
+
+    }
+    .product-list{
+        display: flex;
+        align-items: flex-start;
+        align-items: center;
+        gap: 12px;
+        margin: 12px;
+    }
+    .container-checkout{
+        display: flex;
+     align-items: center;
+     margin-top: 24px;
+    }
+    .container-detail {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: medium;
+
+    }
+    .totalPrice{
+        margin-top: 12px;
+    }
+  </style>
   <body>
-    <h1>Hello</h1>
+    <div class="container">
+      <h1>Shopping Cart</h1>
+      <h3>Add Item for selection</h3>
+      <div class="container-input">
+        <div>
+          <label>Product Name:</label>
+          <input type="text" id="input-txt" />
+        </div>
+        <div>
+          <label>Price:</label>
+          <input type="number" id="input-price" />
+        </div>
+        <div>
+          <label>Image URL:</label>
+          <input type="url" id="input-txt-url" />
+        </div>
+        <button onclick="addItem()">Create Product</button>
+      </div>
+      <div class="container-dashboard">
+        <h3>Product Dashboard
+        <div id="product-dashboard"> 
+            <!-- PRODUCT LIST HERE -->
+        </div>
+        <button onclick="addToCard()">Add to Cart</button>
+      </div>
+      <div class="container-checkout">
+        <h3>Checkout
+        <div id="product-checkout">
+            <!-- PRODUCT CHECKOUT HERE -->
+        </div>
+        <button onclick="total()">Calculate Final Price</button>
+        <div id="totalPrice" class="totalPrice">
+            
+        </div>
+      </div>
+      
+    </div>
   </body>
+  <script>
+    let itemProduct = []
+    let selectItem = []
+
+    // CREATE ADDITEM FUNCTION FOR INPUT PRODUCT NAME, PRICE, URL IMAGE
+    function addItem() {
+        const inputTxt = document.getElementById("input-txt").value
+        const inputPrice = document.getElementById("input-price").value
+        const inputUrl = document.getElementById("input-txt-url").value
+
+        const id = Date.now()
+        itemProduct.push({
+            id,
+            productName: inputTxt,
+            price: inputPrice,
+            url: inputUrl
+        })
+        console.log(itemProduct);
+        render()
+        addToCard()
+ 
+    }
+
+    
+    // CREATE RENDER FUNCTION FOR LOOP ITEM AND DISPLAY TO SHOW A ITEM 
+    function render() {
+        let productListHtml =""
+        for (let item of itemProduct) {
+            productListHtml += `
+            <div class="product-list" data-id="${item.id}">
+                        <input type="checkbox" id="product-list"  data-id="${item.id}"  data-name="${item.productName}" data-price="${item.price}" data-url="${item.url}" onclick="selectProduct(event)"  >
+                        <img src="${item.url}" width = "85px" height = "80px"/>
+                    <div class="container-detail">
+                        <div><strong>${item.productName}</strong></div>
+                        <div>$ ${item.price}</div>
+                    </div>
+            </div>`
+        }
+        
+        document.getElementById("product-dashboard").innerHTML = productListHtml
+    }
+
+    //Select a product and get the value of the product we selected.
+    function selectProduct(event) {
+        const productList = document.getElementById('product-list').value
+        // console.log(productList);
+        const checkbox = event.target
+        const productId = checkbox.getAttribute("data-id")
+        const productName = checkbox.getAttribute("data-name")
+        const productPrice = checkbox.getAttribute("data-price")
+        const productUrl = checkbox.getAttribute("data-url")
+        
+        // console.log(event.target.value );
+
+        if (checkbox.checked) {
+            selectItem.push({
+                id: productId,
+                productName: productName,
+                price: productPrice,
+                url: productUrl,
+            })
+        } else {
+            selectItem = selectItem.filter(item => item.id !== productId)
+        }
+        console.log(selectItem);
+    }
+
+    // Select the desired product and display it in the Check out section.
+    function addToCard() {
+        let productCheckoutHtml = ""
+        for (let item of selectItem) {
+            productCheckoutHtml += `
+             <div class="product-list" id="${item.id}"">
+                <img src="${item.url}" width = "85px" height = "80px"/>
+                <div class="container-detail">
+                    <div><strong>${item.productName}</strong></div>
+                    <div>$ ${item.price}</div>
+                    <button onclick="removeItem(${item.id})">Remove</button>
+                </div> 
+            </div>`
+        }
+        // console.log("Updated checkout HTML:", productCheckoutHtml)
+        document.getElementById("product-checkout").innerHTML = productCheckoutHtml
+
+    }
+
+    //remove item
+    function removeItem(id) {
+        const idNumber = Number(id)
+        selectItem = selectItem.filter(item => item.id.toString() !== idNumber.toString())
+        addToCard()
+        
+        console.log(`Removed item with id: ${id}`);
+         
+    }
+
+    //Calculate Total Price
+    function total() {
+        let total = 0
+        selectItem.forEach(item => { 
+            total += parseFloat(item.price)
+            return total
+    })
+    document.getElementById("totalPrice").innerHTML = `<div>You have to pay: $${total.toFixed(2)}</div>`
+    // console.log(`Total amount: $${total.toFixed(2)}`);
+    }
+  </script>
 </html>
