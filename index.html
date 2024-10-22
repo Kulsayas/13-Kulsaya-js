@@ -6,14 +6,14 @@
     <title>Document</title>
   </head>
   <style>
-     body {
-        box-sizing: none;
-        height: 100vh;
-        width: 100vw;
-        background-color: #f4f4f4;
-        font-family: Arial, Helvetica, sans-serif;
-     }
-     .container {
+    body {
+      box-sizing: none;
+      height: 100vh;
+      width: 100vw;
+      background-color: #f4f4f4;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .container {
       display: flex;
       justify-content: center;
       flex-direction: column;
@@ -21,45 +21,42 @@
       margin-left: auto;
       margin-right: auto;
       width: 60%;
-
     }
     h1 {
-        align-self: center;
+      align-self: center;
     }
     .container-input {
       display: flex;
       gap: 16px;
       margin-bottom: 32px;
     }
-   
     .container-dashboard {
       display: flex;
-     align-items: center;
-
+      align-items: center;
     }
     .product-list{
-        display: flex;
-        align-items: flex-start;
-        align-items: center;
-        gap: 12px;
-        margin: 12px;
+      display: flex;
+      align-items: flex-start;
+      align-items: center;
+      gap: 12px;
+      margin: 12px;
     }
     .container-checkout{
-        display: flex;
-     align-items: center;
-     margin-top: 24px;
+      display: flex;
+      align-items: center;
+      margin-top: 24px;
     }
     .container-detail {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        font-size: medium;
-
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: medium;
     }
     .totalPrice{
-        margin-top: 12px;
+      margin-top: 12px;
     }
   </style>
+
   <body>
     <div class="container">
       <h1>Shopping Cart</h1>
@@ -99,44 +96,45 @@
       
     </div>
   </body>
+  
   <script>
     let itemProduct = []
     let selectItem = []
 
     // CREATE ADDITEM FUNCTION FOR INPUT PRODUCT NAME, PRICE, URL IMAGE
     function addItem() {
-        const inputTxt = document.getElementById("input-txt").value
-        const inputPrice = document.getElementById("input-price").value
-        const inputUrl = document.getElementById("input-txt-url").value
+      const inputTxt = document.getElementById("input-txt").value
+      const inputPrice = document.getElementById("input-price").value
+      const inputUrl = document.getElementById("input-txt-url").value
 
-        itemProduct.push({
-            id: Date.now(),
-            productName: inputTxt,
-            price: inputPrice,
-            url: inputUrl
-        })
-        console.log(itemProduct);
-        render()
-        addToCard()
+      itemProduct.push({
+        id: Date.now(),
+        productName: inputTxt,
+        price: inputPrice,
+        url: inputUrl
+      })
+      
+      render()
+      addToCard()
     }
 
     
     // CREATE RENDER FUNCTION FOR LOOP ITEM AND DISPLAY TO SHOW A ITEM 
     function render() {
-        let productListHtml = ""
-        for (let item of itemProduct) {
-            productListHtml += `
-            <div class="product-list">
-                        <input type="checkbox" id="product-list" value="${item.id}" onclick="selectProduct(event)"  >
-                        <img src="${item.url}" width = "85px" height = "80px"/>
-                    <div class="container-detail">
-                        <div><strong>${item.productName}</strong></div>
-                        <div>$ ${item.price}</div>
-                    </div>
-            </div>`
-        }
-        
-        document.getElementById("product-dashboard").innerHTML = productListHtml
+      let productListHtml = ""
+      for (let item of itemProduct) {
+        productListHtml += `
+        <div class="product-list">
+          <input type="checkbox" id="product-list" value="${item.id}" onclick="selectProduct(event)" >
+          <img src="${item.url}" width = "85px" height = "80px"/>
+          <div class="container-detail">
+            <strong>${item.productName}</strong>
+            <div>$ ${item.price}</div>
+          </div>
+        </div>`
+      }
+      
+      document.getElementById("product-dashboard").innerHTML = productListHtml
     }
 
     //SELECT A PRODUCT AND GET THE VALUE OF THE PRODUCT WE SELECTED.
@@ -154,30 +152,26 @@
 
     //SELECT THE DESIRED PRODUCT AND DISPLAY IT IN THE CHECK OUT SECTION.
     function addToCard() {
-        let productCheckoutHtml = ""
-        for (let item of selectItem) {
-            productCheckoutHtml += `
-             <div class="product-list" id="${item.id}"">
-                <img src="${item.url}" width = "85px" height = "80px"/>
-                <div class="container-detail">
-                    <div><strong>${item.productName}</strong></div>
-                    <div>$ ${item.price}</div>
-                    <button onclick="removeItem(${item.id})">Remove</button>
-                </div> 
-            </div>`
-        }
-        // console.log("Updated checkout HTML:", productCheckoutHtml)
-        document.getElementById("product-checkout").innerHTML = productCheckoutHtml
-
+      let productCheckoutHtml = ""
+      for (let item of selectItem) {
+        productCheckoutHtml += `
+         <div class="product-list" id="${item.id}"">
+            <img src="${item.url}" width = "85px" height = "80px"/>
+            <div class="container-detail">
+                <div><strong>${item.productName}</strong></div>
+                <div>$ ${item.price}</div>
+                <button onclick="removeItem(${item.id})">Remove</button>
+            </div> 
+        </div>`
+      }
+      document.getElementById("product-checkout").innerHTML = productCheckoutHtml
     }
 
     //REMOVE ITEMS
     function removeItem(id) {
-        selectItem = selectItem.filter(item => parseInt(item.id) !== id)
-        addToCard()
-        
-        // console.log(`Removed item with id: ${id}`);
-         
+      const removeIndex = selectItem.findIndex((item) => parseInt(item.id) === id)
+      selectItem.splice(removeIndex, 1)
+      addToCard() 
     }
 
     //CALCULATED TOTAL PRICE
@@ -187,7 +181,6 @@
         total += parseFloat(item.price)            
       })
       document.getElementById("totalPrice").innerHTML = `<div>You have to pay: $${total.toFixed(2)}</div>`
-    // console.log(`Total amount: $${total.toFixed(2)}`);
     }
   </script>
 </html>
