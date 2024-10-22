@@ -109,9 +109,8 @@
         const inputPrice = document.getElementById("input-price").value
         const inputUrl = document.getElementById("input-txt-url").value
 
-        const id = Date.now()
         itemProduct.push({
-            id,
+            id: Date.now(),
             productName: inputTxt,
             price: inputPrice,
             url: inputUrl
@@ -119,17 +118,16 @@
         console.log(itemProduct);
         render()
         addToCard()
- 
     }
 
     
     // CREATE RENDER FUNCTION FOR LOOP ITEM AND DISPLAY TO SHOW A ITEM 
     function render() {
-        let productListHtml =""
+        let productListHtml = ""
         for (let item of itemProduct) {
             productListHtml += `
-            <div class="product-list" data-id="${item.id}">
-                        <input type="checkbox" id="product-list"  data-id="${item.id}"  data-name="${item.productName}" data-price="${item.price}" data-url="${item.url}" onclick="selectProduct(event)"  >
+            <div class="product-list">
+                        <input type="checkbox" id="product-list" value="${item.id}" onclick="selectProduct(event)"  >
                         <img src="${item.url}" width = "85px" height = "80px"/>
                     <div class="container-detail">
                         <div><strong>${item.productName}</strong></div>
@@ -143,27 +141,15 @@
 
     //SELECT A PRODUCT AND GET THE VALUE OF THE PRODUCT WE SELECTED.
     function selectProduct(event) {
-        const productList = document.getElementById('product-list').value
-        // console.log(productList);
-        const checkbox = event.target
-        const productId = checkbox.getAttribute("data-id")
-        const productName = checkbox.getAttribute("data-name")
-        const productPrice = checkbox.getAttribute("data-price")
-        const productUrl = checkbox.getAttribute("data-url")
-        
-        // console.log(event.target.value );
-
-        if (checkbox.checked) {
-            selectItem.push({
-                id: productId,
-                productName: productName,
-                price: productPrice,
-                url: productUrl,
-            })
-        } else {
-            selectItem = selectItem.filter(item => item.id !== productId)
-        }
-        console.log(selectItem);
+      const checkbox = event.target
+      const selectedId = parseInt(checkbox.value)
+      const selectValue = itemProduct.filter(item => item.id === selectedId)
+      
+      if (checkbox.checked) {
+        selectItem.push(...selectValue);
+      } else {
+        selectItem = selectItem.filter(item => item.id !== selectedId);
+      }
     }
 
     //SELECT THE DESIRED PRODUCT AND DISPLAY IT IN THE CHECK OUT SECTION.
@@ -187,22 +173,20 @@
 
     //REMOVE ITEMS
     function removeItem(id) {
-        const idNumber = Number(id)
-        selectItem = selectItem.filter(item => item.id.toString() !== idNumber.toString())
+        selectItem = selectItem.filter(item => parseInt(item.id) !== id)
         addToCard()
         
-        console.log(`Removed item with id: ${id}`);
+        // console.log(`Removed item with id: ${id}`);
          
     }
 
     //CALCULATED TOTAL PRICE
     function total() {
-        let total = 0
-        selectItem.forEach(item => { 
-            total += parseFloat(item.price)
-            return total
-    })
-    document.getElementById("totalPrice").innerHTML = `<div>You have to pay: $${total.toFixed(2)}</div>`
+      let total = 0
+      selectItem.forEach(item => { 
+        total += parseFloat(item.price)            
+      })
+      document.getElementById("totalPrice").innerHTML = `<div>You have to pay: $${total.toFixed(2)}</div>`
     // console.log(`Total amount: $${total.toFixed(2)}`);
     }
   </script>
